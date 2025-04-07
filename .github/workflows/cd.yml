@@ -8,16 +8,10 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-
+    
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-
-      - name: Clean cache directory
-        run: rm -rf ${{ runner.temp }}/go/pkg/mod/golang.org/x/telemetry/config@v0.45.0
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -30,17 +24,8 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
         with:
-          version: '>= 363.0.0'
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: 'Set Google Cloud Project'
-        run: |
-          echo ${{ secrets.GCP_CREDENTIALS }} | base64 --decode > ${HOME}/gcloud.json
-          gcloud auth activate-service-account --key-file=${HOME}/gcloud.json
-          gcloud config set project vibrant-chain-456112-i4
-
-      - name: 'Use gcloud CLI'
-        run: 'gcloud info'
+          project_id: vibrant-chain-456112-i4
 
       - name: 'Build and push Docker image'
         run: 'gcloud builds submit --tag us-central1-docker.pkg.dev/vibrant-chain-456112-i4/notely-ar-repo/notely:latest .'
