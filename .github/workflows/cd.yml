@@ -9,8 +9,8 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     permissions:
-        contents: 'read'
-        id-token: 'write'
+      contents: 'read'
+      id-token: 'write'
 
     steps:
       - name: Check out code
@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.23.0"
-      
+
       - name: Build the app
         run: scripts/buildprod.sh
 
@@ -29,17 +29,12 @@ jobs:
         with:
           version: '>= 363.0.0'
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-          
-      - name: 'Authenticate to Google Cloud'
-        run: |
-            echo "${{ secrets.GCP_SA_KEY }}" | gcloud auth activate-service-account --key-file=-
-        
+
       - name: 'Set Google Cloud Project'
         run: 'gcloud config set project vibrant-chain-456112-i4'
-  
+        
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
       - name: 'Build and push Docker image'
         run: 'gcloud builds submit --tag us-central1-docker.pkg.dev/vibrant-chain-456112-i4/notely-ar-repo/notely:latest .'
-
