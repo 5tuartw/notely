@@ -32,7 +32,10 @@ jobs:
 
       - name: 'Set Google Cloud Project'
         run: 'gcloud config set project vibrant-chain-456112-i4'
-        
+
+      - name: 'Authenticate gcloud account'
+        run: 'gcloud auth activate-service-account --key-file=${{ secrets.GCP_SA_KEY }}'
+
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
