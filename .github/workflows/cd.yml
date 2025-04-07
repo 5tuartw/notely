@@ -21,11 +21,13 @@ jobs:
       - name: Build the app
         run: scripts/buildprod.sh
 
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
-        with:
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-          project_id: vibrant-chain-456112-i4
 
       - name: 'Build and push Docker image'
         run: 'gcloud builds submit --tag us-central1-docker.pkg.dev/vibrant-chain-456112-i4/notely-ar-repo/notely:latest .'
