@@ -31,3 +31,6 @@ jobs:
 
       - name: 'Build and push Docker image'
         run: 'gcloud builds submit --tag us-central1-docker.pkg.dev/vibrant-chain-456112-i4/notely-ar-repo/notely:latest .'
+
+      - name: Deploy to Cloud Run
+        run: gcloud run deploy notely --image us-central1-docker.pkg.dev/vibrant-chain-456112-i4/notely-ar-repo/notely:latest --region REGION --allow-unauthenticated --project PROJECT_ID --max-instances=4
