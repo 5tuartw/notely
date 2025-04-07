@@ -20,3 +20,6 @@ jobs:
 
       - name: Test GetAPIKey
         run: go test ./... -cover
+
+      - name: Style
+        uses: test -z $(go fmt ./...)
