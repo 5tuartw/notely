@@ -53,7 +53,7 @@ func (cfg *apiConfig) handlerUsersCreate(w http.ResponseWriter, r *http.Request)
 		respondWithError(w, http.StatusInternalServerError, "Couldn't convert user", err)
 		return
 	}
-	respondWithJSON(w, 201, userResp)
+	respondWithJSON(w, http.StatusCreated, userResp)
 }
 
 func generateRandomSHA256Hash() (string, error) {
@@ -75,5 +75,5 @@ func (cfg *apiConfig) handlerUsersGet(w http.ResponseWriter, r *http.Request, us
 		return
 	}
 
-	respondWithJSON(w, 201, userResp)
+	respondWithJSON(w, http.StatusOK, userResp)
 }

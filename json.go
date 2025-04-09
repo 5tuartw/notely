@@ -22,18 +22,21 @@ func respondWithError(w http.ResponseWriter, code int, msg string, logErr error)
 }
 
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
-	w.Header().Set("Content-Type", "application/json")
-	dat, err := json.Marshal(payload)
-	if err != nil {
-		log.Printf("Error marshalling JSON: %s", err)
-		w.WriteHeader(500)
-		return
-	}
-	_, err = w.Write(dat)
-	if err != nil {
-		log.Printf("Error writing payload: %s", err)
-		w.WriteHeader(500)
-		return
-	}
-	w.WriteHeader(code)
+    w.Header().Set("Content-Type", "application/json")
+    // Set status code BEFORE writing the body
+    w.WriteHeader(code)
+    
+    dat, err := json.Marshal(payload)
+    if err != nil {
+        log.Printf("Error marshalling JSON: %s", err)
+        // Too late to change status code here
+        return
+    }
+    
+    _, err = w.Write(dat)
+    if err != nil {
+        log.Printf("Error writing payload: %s", err)
+        // Too late to change status code here
+        return
+    }
 }
